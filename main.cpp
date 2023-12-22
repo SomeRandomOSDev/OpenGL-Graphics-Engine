@@ -49,8 +49,8 @@ int main()
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
-    Mesh cube(&cubeData[0], 12);
-    Mesh triangle(&triData[0], 1);
+    Object cube(Mesh(&cubeData[0], 12));
+    Object triangle(Mesh(&triData[0], 1), glm::vec3(0, 5, 0), glm::vec3(0, 0, 0), glm::vec3(2, 2, 2));
     
 ////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -4,9 +4,9 @@
 #include "Camera.hpp"
 #include "Object.hpp"
 
-void DrawMesh(GLuint shadersID, Mesh mesh, Camera cam)
+void DrawMesh(GLuint shadersID, Object object, Camera cam)
 {
-    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 model = object.matrix;
 
     glm::mat4 mvp = cam.projectionMatrix * cam.viewMatrix * model;
 
@@ -16,7 +16,7 @@ void DrawMesh(GLuint shadersID, Mesh mesh, Camera cam)
 
     {
         glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, mesh.VBO);
+        glBindBuffer(GL_ARRAY_BUFFER, object.mesh.VBO);
         glVertexAttribPointer(
             0,
             3,
@@ -26,7 +26,7 @@ void DrawMesh(GLuint shadersID, Mesh mesh, Camera cam)
             (void*)0
         );
 
-        glDrawArrays(GL_TRIANGLES, 0, mesh.triCount * 3);
+        glDrawArrays(GL_TRIANGLES, 0, object.mesh.triCount * 3);
         glDisableVertexAttribArray(0);
     }
 }

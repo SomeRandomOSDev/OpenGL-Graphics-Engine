@@ -10,6 +10,7 @@
 #include "draw.hpp"
 #include "Camera.hpp"
 #include "meshes.hpp"
+#include "Object.hpp"
 
 int main()
 {
@@ -48,10 +49,8 @@ int main()
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
-    GLuint VBO;
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeData), cubeData, GL_STATIC_DRAW);
+    Mesh cube(&cubeData[0], 12);
+    Mesh triangle(&triData[0], 1);
     
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -61,13 +60,18 @@ int main()
     
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Camera mainCamera(90.f, vm.width / (float)vm.height, glm::vec3(3, 3, 3), glm::vec3(0, 0, 0));
+    Camera viewportCamera(
+    90.f, vm.width / (float)vm.height, glm::vec3(0, 0, 3), glm::vec3(0, 0, 0));
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
     bool running = true;
+    sf::Clock frameTimer;
     while (running)
     {
+        float deltaTime = frameTimer.getElapsedTime().asSeconds();
+        frameTimer.restart();
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -77,12 +81,23 @@ int main()
                 glViewport(0, 0, event.size.width, event.size.height);
         }
 
+        std::cout << deltaTime << std::endl;
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 			running = false;
 
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+        {
+            window.setMouseCursorVisible(false);
+            viewportCamera.handleFreeCam(deltaTime, 0.5f, 5);
+        }
+        else
+            window.setMouseCursorVisible(true);
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            DrawMesh(shadersID, VBO, 12, mainCamera);
+        DrawMesh(shadersID, cube, viewportCamera);
+        DrawMesh(shadersID, triangle, viewportCamera);
 
         window.display();
     }

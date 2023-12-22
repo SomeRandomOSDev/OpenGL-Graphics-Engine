@@ -2,8 +2,9 @@
 
 #include "util.hpp"
 #include "Camera.hpp"
+#include "Object.hpp"
 
-void DrawMesh(GLuint shadersID, GLuint VBO, unsigned int triCount, Camera cam)
+void DrawMesh(GLuint shadersID, Mesh mesh, Camera cam)
 {
     glm::mat4 model = glm::mat4(1.0f);
 
@@ -15,7 +16,7 @@ void DrawMesh(GLuint shadersID, GLuint VBO, unsigned int triCount, Camera cam)
 
     {
         glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBindBuffer(GL_ARRAY_BUFFER, mesh.VBO);
         glVertexAttribPointer(
             0,
             3,
@@ -25,7 +26,7 @@ void DrawMesh(GLuint shadersID, GLuint VBO, unsigned int triCount, Camera cam)
             (void*)0
         );
 
-        glDrawArrays(GL_TRIANGLES, 0, triCount * 3);
+        glDrawArrays(GL_TRIANGLES, 0, mesh.triCount * 3);
         glDisableVertexAttribArray(0);
     }
 }

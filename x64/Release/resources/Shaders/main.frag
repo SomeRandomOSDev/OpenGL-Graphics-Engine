@@ -153,7 +153,7 @@ void main()
 		for(int i = 0; i < 10; i++)
 		{		
 			PointLight light;
-			light.position = vec3((i - 5) * 2, 1, 5);
+			light.position = vec3((i - 5) * 2, 2, 3);
 			light.intensity = 50;
 			light.color = vec3(i / 10.f, (10 - i) / 10.f, i / 10.f);
 			light.ambient = vec3(0.f);

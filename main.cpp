@@ -51,25 +51,6 @@ int main()
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    GLuint VAO;
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-
-    Texture crateTex("resources/Images/crate.jpg", GL_SRGB);
-
-    //Object cube(Mesh("resources/Meshes/cube.obj"));
-    Object triangles[10];
-    for (unsigned int i = 0; i < 10; i++)
-    {
-        triangles[i] = Object(Mesh(&triDATA[0], &triDATA_UVs[0], &triDATA_Normals[0], crateTex, 1),
-        glm::vec3(i * 2 - 9.f, 0, 0));
-        triangles[i].mesh.metallic = false;
-        triangles[i].mesh.roughness = 0.1f + (i * 0.1f);
-        triangles[i].mesh.IOR = 1.45f;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     GLuint shadersID = LoadShaders("resources/Shaders/main.vert", "resources/Shaders/main.frag");
     if (shadersID == 0)
     {
@@ -78,6 +59,26 @@ int main()
     }
     glUseProgram(shadersID);
     std::cout << "Linked !" << std::endl;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    GLuint VAO;
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+
+    Texture crateTex("resources/Images/crate.jpg", GL_SRGB);
+    std::vector<Object> scene;
+    /*for (unsigned int i = 0; i < 10; i++)
+    {
+        scene.push_back(Object(Mesh(&triDATA[0], &triDATA_UVs[0], &triDATA_Normals[0], crateTex, 1, shadersID),
+        glm::vec3(i * 2 - 9.f, 0, 0)));
+        scene[i].mesh.metallic = false;
+        scene[i].mesh.roughness = 0.1f + (i * 0.1f);
+        scene[i].mesh.IOR = 1.45f;
+    }*/
+
+    Object cube(Mesh("resources/Meshes/cube.obj", shadersID));
+    scene.push_back(cube);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -134,11 +135,7 @@ int main()
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //DrawMesh(shadersID, cube, viewportCamera);
-        for (unsigned int i = 0; i < 10; i++)
-        {
-            DrawMesh(shadersID, triangles[i], viewportCamera);
-        }
+        Render(scene, viewportCamera);
 
         //ImGui::SFML::Render(window);
 

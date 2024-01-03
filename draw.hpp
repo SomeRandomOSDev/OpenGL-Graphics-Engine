@@ -57,3 +57,11 @@ void DrawMesh(GLuint shadersID, Object object, Camera cam)
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(2);
 }
+
+void Render(std::vector<Object> scene, Camera camera)
+{
+    for (unsigned int i = 0; i < scene.size(); i++)
+    {
+        DrawMesh(scene[i].mesh.shadersID, scene[i], camera);
+    }
+}

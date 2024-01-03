@@ -8,6 +8,25 @@ Texture::Texture(std::string path, GLint colorSpace)
 	loadFromFile(path, colorSpace);
 }
 
+Texture::Texture(unsigned int width, unsigned int height, glm::vec3 color, GLint colorSpace)
+{
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	unsigned char* data = new unsigned char[width * height];
+	memset(data, 0, width * height);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, colorSpace, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	free(data);
+}
+
 void Texture::bind(GLenum textureUnit)
 {
 	glActiveTexture(textureUnit);

@@ -20,13 +20,14 @@ public:
 		&emptyMeshDATA_Normals[0], emptyTexture, 1);
 	}
 
-	Mesh(std::string pathToOBJ)
+	Mesh(std::string pathToOBJ, GLuint _shadersID)
 	{
 		loadFromOBJ(pathToOBJ);
+		shadersID = _shadersID;
 	}
 
 	Mesh(GLfloat* data, GLfloat* UVData, GLfloat* normalData, 
-	Texture _albedo, unsigned int triCount) : triCount(triCount)
+	Texture _albedo, unsigned int triCount, GLuint _shadersID) : triCount(triCount), shadersID(_shadersID)
 	{
 		loadMeshFromBuffer(data, UVData, normalData, _albedo, triCount);
 	}
@@ -157,7 +158,15 @@ public:
 		glBindBuffer(GL_ARRAY_BUFFER, NBO);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * triCount * 3 * 3, &facesNormals[0], GL_STATIC_DRAW);
 
-		albedo = Texture();
+		glGenBuffers(1, &UVBO);
+		glBindBuffer(GL_ARRAY_BUFFER, UVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)* triCount * 3 * 3, &facesUV[0], GL_STATIC_DRAW);
+
+		albedo = Texture("resources/Images/crate.jpg", GL_SRGB);
+
+		roughness = 0.5f;
+		metallic = false;
+		IOR = 1.45f;
 
 		f.close();
 		return true;
@@ -168,6 +177,8 @@ public:
 	GLuint UVBO;
 	GLuint NBO;
 	unsigned int triCount;
+
+	GLuint shadersID;
 
 	Texture albedo;
 	float roughness;

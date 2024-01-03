@@ -52,6 +52,7 @@ GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path)
 		std::vector<char> VertexShaderErrorMessage(InfoLogLength + 1);
 		glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
 		std::cout << &VertexShaderErrorMessage[0] << std::endl;
+		return 0;
 	}
 
 	std::cout << "Compiling shader : " << fragment_file_path << std::endl;
@@ -65,6 +66,7 @@ GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path)
 		std::vector<char> FragmentShaderErrorMessage(InfoLogLength + 1);
 		glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
 		std::cout << &FragmentShaderErrorMessage[0] << std::endl;
+		return 0;
 	}
 
 	std::cout << "Linking program..." << std::endl;
@@ -79,6 +81,7 @@ GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path)
 		std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
 		glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
 		std::cout << &ProgramErrorMessage[0] << std::endl;
+		return 0;
 	}
 
 	glDetachShader(ProgramID, VertexShaderID);
@@ -88,4 +91,25 @@ GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path)
 	glDeleteShader(FragmentShaderID);
 
 	return ProgramID;
+}
+
+void setBool(GLuint shadersID, const std::string& name, bool value)
+{
+	glUniform1i(glGetUniformLocation(shadersID, name.c_str()), (int)value);
+}
+void setInt(GLuint shadersID, const std::string& name, int value)
+{
+	glUniform1i(glGetUniformLocation(shadersID, name.c_str()), value);
+}
+void setFloat(GLuint shadersID, const std::string& name, float value)
+{
+	glUniform1f(glGetUniformLocation(shadersID, name.c_str()), value);
+}
+void setMat4(GLuint shadersID, const std::string& name, glm::mat4 value)
+{
+	glUniformMatrix4fv(glGetUniformLocation(shadersID, name.c_str()), 1, GL_FALSE, &value[0][0]);
+}
+void setVec3(GLuint shadersID, const std::string& name, glm::vec3 value)
+{
+	glUniform3fv(glGetUniformLocation(shadersID, name.c_str()), 1, &value[0]);
 }

@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\PC\Desktop\C++\lib\glm;C:\Users\PC\Desktop\C++\lib\SFML-2.5.1\include;C:\Users\PC\Desktop\C++\lib\glew-2.1.0\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\PC\Desktop\C++\lib\glm;C:\Users\PC\Desktop\C++\lib\SFML-2.5.1\include;C:\Users\PC\Desktop\C++\lib\glew-2.1.0\include;C:\Users\PC\Desktop\C++\lib\imgui-master;C:\Users\PC\Desktop\C++\lib\imgui-sfml-2.6.x</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -135,11 +135,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
-    <None Include="x64\Release\Shaders\main.frag" />
-    <None Include="x64\Release\Shaders\main.vert" />
+    <None Include="x64\Release\resources\Shaders\main.frag" />
+    <None Include="x64\Release\resources\Shaders\main.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.hpp" />
@@ -148,6 +149,8 @@
     <ClInclude Include="meshes.hpp" />
     <ClInclude Include="Object.hpp" />
     <ClInclude Include="shaders.hpp" />
+    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Texture.hpp" />
     <ClInclude Include="util.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

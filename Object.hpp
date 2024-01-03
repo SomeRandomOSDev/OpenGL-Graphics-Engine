@@ -7,7 +7,6 @@
 class Object
 {
 public:
-	Object() : mesh(), position(0, 0, 0), rotation(0, 0, 0), scale(1, 1, 1), matrix(1) {}
 	Object(Mesh mesh = Mesh(), glm::vec3 position = glm::vec3(0, 0, 0), glm::vec3 rotation = glm::vec3(0, 0, 0), glm::vec3 scale = glm::vec3(1, 1, 1)) :
 	mesh(mesh), position(position), rotation(rotation), scale(scale), matrix(1)
 	{

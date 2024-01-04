@@ -12,11 +12,11 @@ void DrawMesh(GLuint shadersID, Object object, Camera cam)
 
 	setVec3(shadersID, "viewPos", cam.position);
 
-    setFloat(shadersID, "mat.roughness", object.mesh.roughness);
-    setFloat(shadersID, "mat.IOR", object.mesh.IOR);
-    setBool(shadersID, "mat.metallic", object.mesh.metallic);
+    setFloat(shadersID, "mat.roughness", object.mesh.mat.roughness);
+    setFloat(shadersID, "mat.IOR", object.mesh.mat.IOR);
+    setBool(shadersID, "mat.metallic", object.mesh.mat.metallic);
 
-    object.mesh.albedo.bind(GL_TEXTURE0);
+    object.mesh.mat.albedo.bind(GL_TEXTURE0);
 
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, object.mesh.VBO);

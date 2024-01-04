@@ -26,7 +26,7 @@ int main()
 
     sf::RenderWindow window(vm, "OpenGL Graphics Engine", sf::Style::Fullscreen, settings);
     window.setVerticalSyncEnabled(false);
-    window.setFramerateLimit(60);
+    /*window.setFramerateLimit(60);*/
 
     window.setActive(true);
 
@@ -66,18 +66,11 @@ int main()
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
-    Texture crateTex("resources/Images/crate.jpg", GL_SRGB);
     std::vector<Object> scene;
-    /*for (unsigned int i = 0; i < 10; i++)
-    {
-        scene.push_back(Object(Mesh(&triDATA[0], &triDATA_UVs[0], &triDATA_Normals[0], crateTex, 1, shadersID),
-        glm::vec3(i * 2 - 9.f, 0, 0)));
-        scene[i].mesh.metallic = false;
-        scene[i].mesh.roughness = 0.1f + (i * 0.1f);
-        scene[i].mesh.IOR = 1.45f;
-    }*/
 
     Object cube(Mesh("resources/Meshes/cube.obj", shadersID));
+    scene.push_back(cube);
+
     scene.push_back(cube);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

@@ -10,6 +10,8 @@
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
 
+#include "Material.hpp"
+
 class Mesh
 {
 public:
@@ -35,7 +37,7 @@ public:
 	void loadMeshFromBuffer(GLfloat* data, GLfloat* UVData, GLfloat* normalData, 
 	Texture _albedo, unsigned int triCount)
 	{
-		albedo = _albedo;
+		mat.albedo = _albedo;
 
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -148,7 +150,6 @@ public:
 		}
 
 		triCount = (unsigned int)faces.size() / 3;
-		std::cout << "Loaded " << triCount << " triangles" << std::endl;
 
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -162,11 +163,12 @@ public:
 		glBindBuffer(GL_ARRAY_BUFFER, UVBO);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)* triCount * 3 * 3, &facesUV[0], GL_STATIC_DRAW);
 
-		albedo = Texture("resources/Images/crate.jpg", GL_SRGB);
+		mat.albedo = Texture("resources/Images/crate.jpg", GL_SRGB);
 
-		roughness = 0.5f;
-		metallic = false;
-		IOR = 1.45f;
+		mat.roughness = 0.5f;
+		mat.metallic = false;
+		mat.IOR = 1.45f;
+		std::cout << "Loaded " << triCount << " triangles" << std::endl;
 
 		f.close();
 		return true;
@@ -180,8 +182,5 @@ public:
 
 	GLuint shadersID;
 
-	Texture albedo;
-	float roughness;
-	bool metallic;
-	float IOR;
+	Material mat;
 };

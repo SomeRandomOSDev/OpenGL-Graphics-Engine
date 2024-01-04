@@ -12,7 +12,7 @@ in vec3 fragPos;
 struct Material
 {
 	sampler2D albedo;
-	float roughness;
+	sampler2D roughness;
 	bool metallic;
 	float IOR;
 };
@@ -28,6 +28,7 @@ vec3 normal_CAMSPACE;
 vec3 viewVector = normalize(fragPos - viewPos);
 
 vec3 albedoColor;
+float roughness;
 
 struct PointLight
 {
@@ -62,21 +63,21 @@ float F(float n1, float n2)
 	return R0 + ((1 - R0) * pow(1 + dot(viewVector, normal), 5));
 }
 
-float GGX_D(vec3 N, vec3 wh, float roughness)
+float GGX_D(vec3 N, vec3 wh, float _roughness)
 {
-    float a2     = sqr(sqr(roughness)); // sqr(roughness)
+    float a2     = sqr(sqr(_roughness)); // sqr(roughness)
     float NdotH2  = sqr(max(dot(normal, wh), 0));
     return a2 / (PI * sqr(NdotH2 * (a2 - 1) + 1));
 }
 
-float G1(float NdotV, float roughness)
+float G1(float NdotV, float _roughness)
 {
-    float k = sqr(roughness + 1) / 8.f;
+    float k = sqr(_roughness + 1) / 8.f;
     return NdotV / (NdotV * (1 - k) + k);
 }
-float SMITH_G(vec3 wi, vec3 wo, float roughness)
+float SMITH_G(vec3 wi, vec3 wo, float _roughness)
 {	
-    return G1(max(dot(normal, wo), 0), roughness) * G1(max(dot(normal, wi), 0), roughness);
+    return G1(max(dot(normal, wo), 0), _roughness) * G1(max(dot(normal, wi), 0), roughness);
 }
 
 float attenuation(vec3 wi, float d2, PointLight l)
@@ -87,8 +88,8 @@ float attenuation(vec3 wi, float d2, PointLight l)
 
 float specularLightContribution(vec3 wi, vec3 wo, vec3 wh, float fresnel, PointLight l)
 {
-	float D = GGX_D(normal, wh, mat.roughness);       
-	float G = SMITH_G(wi, wo, mat.roughness);	
+	float D = GGX_D(normal, wh, roughness);       
+	float G = SMITH_G(wi, wo, roughness);	
 	float cosTheta = max(0, dot(normal, wi));
 	float BRDF = (D * fresnel * G) / max(0.01, 4 * max(dot(normal, wo), 0) * max(dot(normal, wi), 0));
 	return BRDF;
@@ -104,13 +105,16 @@ void addLightContribution(float fresnel, PointLight l)
 	vec3 wo = -viewVector;
 	vec3 wh = normalize(wi + wo);
 
-	float diffuseAmount = (1 - fresnel) * (1 - int(mat.metallic));
-	float specularAmount = 1 - diffuseAmount;
+	float diffuseAmount = (1 - fresnel);
+	float specularAmount = fresnel;
 
 	vec3 lightColor = l.color * l.intensity * attenuation(wi, d2, l);
 	float specularColor = specularLightContribution(wi, wo, wh, fresnel, l);
 
-	fragColor += (diffuseAmount * albedoColor + specularAmount * specularColor) * lightColor / PI;
+	if(mat.metallic)
+		fragColor += specularColor * lightColor * albedoColor / PI;
+	else
+		fragColor += (diffuseAmount * albedoColor + specularAmount * specularColor) * lightColor / PI;
 }
 
 vec3 tonemap(vec3 _color)
@@ -139,6 +143,7 @@ void main()
 	}
 
 	albedoColor = texture(mat.albedo, UV).rgb;
+	roughness = texture(mat.roughness, UV).r;
 
 	switch(mode)
 	{
@@ -154,7 +159,7 @@ void main()
 		{		
 			PointLight light;
 			light.position = vec3((i - 5) * 2, 2, 3);
-			light.intensity = 50;
+			light.intensity = 100;
 			light.color = vec3(i / 10.f, (10 - i) / 10.f, i / 10.f);
 			light.ambient = vec3(0.f);
 

@@ -68,7 +68,7 @@ int main()
 
     std::vector<Object> scene;
 
-    Object cube(Mesh("resources/Meshes/cube.obj", shadersID));
+    Object cube(Mesh("resources/Meshes/Chess/rook.obj", shadersID));
     scene.push_back(cube);
 
     scene.push_back(cube);

@@ -93,8 +93,9 @@ public:
 			}
 			else if (kw == "vt")
 			{
-				glm::vec3 t;
-				ss >> t.x >> t.y >> t.z;
+				glm::vec2 t;
+				ss >> t.x >> t.y;
+				t.y = 1 - t.y;
 				UVs.push_back(t);
 			}
 			else if (kw == "f")
@@ -163,10 +164,9 @@ public:
 		glBindBuffer(GL_ARRAY_BUFFER, UVBO);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)* triCount * 3 * 3, &facesUV[0], GL_STATIC_DRAW);
 
-		mat.albedo = Texture("resources/Images/crate.jpg", GL_SRGB);
-
-		mat.roughness = 0.5f;
-		mat.metallic = false;
+		mat.albedo = Texture("resources/Meshes/Chess/rookAlbedo.png", GL_SRGB);
+		mat.roughness = Texture("resources/Meshes/Chess/rookRoughness.png", GL_RGB);
+		mat.metallic = true;
 		mat.IOR = 1.45f;
 		std::cout << "Loaded " << triCount << " triangles" << std::endl;
 

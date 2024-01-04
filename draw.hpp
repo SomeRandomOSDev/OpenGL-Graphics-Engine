@@ -18,6 +18,7 @@ void DrawMesh(GLuint shadersID, Object object, Camera cam)
 
     object.mesh.mat.albedo.bind(GL_TEXTURE0);
     object.mesh.mat.roughness.bind(GL_TEXTURE1);
+    object.mesh.mat.normalMap.bind(GL_TEXTURE2);
 
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, object.mesh.VBO);

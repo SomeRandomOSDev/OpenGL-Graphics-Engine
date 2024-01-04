@@ -13,6 +13,7 @@ struct Material
 {
 	sampler2D albedo;
 	sampler2D roughness;
+	sampler2D normalMap;
 	bool metallic;
 	float IOR;
 };
@@ -25,6 +26,7 @@ in mat4 MVP;
 
 vec3 normal;
 vec3 normal_CAMSPACE;
+vec3 normal_TANSPACE;
 vec3 viewVector = normalize(fragPos - viewPos);
 
 vec3 albedoColor;
@@ -133,6 +135,9 @@ void main()
 {
 	LightingMode mode = Lit;
 
+//	normal_TANSPACE = texture(normalMap, UV).rgb;
+//    normal = normalize(normal * 2.0 - 1.0);   
+
 	normal = vec3(normal_wrong);
 	normal_CAMSPACE = vec3(MVP * normal_wrong);
 
@@ -157,13 +162,16 @@ void main()
 
 		for(int i = 0; i < 10; i++)
 		{		
-			PointLight light;
-			light.position = vec3((i - 5) * 2, 2, 3);
-			light.intensity = 100;
-			light.color = vec3(i / 10.f, (10 - i) / 10.f, i / 10.f);
-			light.ambient = vec3(0.f);
+			for(int j = 0; j < 10; j++)
+			{		
+				PointLight light;
+				light.position = vec3((i - 5) * 2, (j - 5) * 2, 3);
+				light.intensity = 100;
+				light.color = vec3(1);//vec3(i / 10.f, (10 - i) / 10.f, i / 10.f);
+				light.ambient = vec3(0.f);
 
-			addLightContribution(R, light);
+				addLightContribution(R, light);
+			}
 		}
 
 		fragColor = tonemap(fragColor);
